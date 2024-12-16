@@ -6,16 +6,8 @@ import "./Countdown.css";
 function Countdown() {
     const [timers, setTimers] = useState([]);
     const [newTimerTitle, setNewTimerTitle] = useState("");
-    const [newTimerCategory, setNewTimerCategory] = useState("");
     const [newTimerDateTime, setNewTimerDateTime] = useState("");
     const [newTimerImage, setNewTimerImage] = useState("");
-
-
-    const categoryColors = {
-        Meeting: "bg-primary",
-        Birthday: "bg-danger",
-        Reminder: "bg-success",
-    };
 
     useEffect(() => {
         const intervalIds = {};
@@ -95,7 +87,7 @@ function Countdown() {
     };
 
     const addTimer = () => {
-        if (!newTimerTitle || !newTimerCategory || !newTimerDateTime) 
+        if (!newTimerTitle || !newTimerDateTime) 
             return;
             
         // Convert to milliseconds since epoch
@@ -103,20 +95,17 @@ function Countdown() {
         
         const newTimer = {
             id: timers.length + 1,
-            category: newTimerCategory,
             targetDateTime,
             // Calculate time remaining here
             timeRemaining: calculateTimeRemaining(targetDateTime), 
             isRunning: true,
             title: newTimerTitle,
             image: newTimerImage,
-            showTitleInput: false,
         };
 
         setTimers([...timers, newTimer]);
 
         setNewTimerTitle("");
-        setNewTimerCategory("");
         setNewTimerDateTime("");
     };
 
@@ -136,18 +125,6 @@ function Countdown() {
                             (e) => setNewTimerTitle(e.target.value)
                         }
                     />
-                    <select
-                        className="form-select m-2"
-                        value={newTimerCategory}
-                        onChange={
-                            (e) => setNewTimerCategory(e.target.value)
-                        }
-                    >
-                        <option value="">Select a Category</option>
-                        <option value="Meeting">Meeting</option>
-                        <option value="Birthday">Birthday</option>
-                        <option value="Reminder">Reminder</option>
-                    </select>
                     <input
                         className="form-control m-2"
                         type="datetime-local"
@@ -167,7 +144,6 @@ function Countdown() {
                         onClick={addTimer}
                         disabled={
                             !newTimerTitle ||
-                            !newTimerCategory ||
                             !newTimerDateTime
                         }
                     >
@@ -183,9 +159,7 @@ function Countdown() {
                         return (
                             <div
                                 key={timer.id}
-                                className={`card m-4 ${
-                                    categoryColors[timer.category] || ""
-                                }`}
+                                className="card m-4"
                             >
                                 {timer.image && (
                                     <img 
@@ -198,9 +172,6 @@ function Countdown() {
                                <h3 className="card-title m-2 text-light">
                                     {timer.title}
                                </h3>
-                                <h4 className="card-title m-2 text-dark">
-                                    {timer.category}
-                                </h4>
                                 <div className="card-body d-flex">
                                     {timeRemaining.days > 0 && (
                                         <div className="container 
