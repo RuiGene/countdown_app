@@ -8,6 +8,8 @@ function Countdown() {
     const [newTimerTitle, setNewTimerTitle] = useState("");
     const [newTimerCategory, setNewTimerCategory] = useState("");
     const [newTimerDateTime, setNewTimerDateTime] = useState("");
+    const [newTimerImage, setNewTimerImage] = useState("");
+
 
     const categoryColors = {
         Meeting: "bg-primary",
@@ -81,6 +83,17 @@ function Countdown() {
         };
     };
 
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                setNewTimerImage(event.target.result); // Base64 string
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const addTimer = () => {
         if (!newTimerTitle || !newTimerCategory || !newTimerDateTime) 
             return;
@@ -96,6 +109,7 @@ function Countdown() {
             timeRemaining: calculateTimeRemaining(targetDateTime), 
             isRunning: true,
             title: newTimerTitle,
+            image: newTimerImage,
             showTitleInput: false,
         };
 
@@ -111,7 +125,7 @@ function Countdown() {
             <div className="main-container">
                 <div className="input-container m-3">
                     <h1 className="text-center text-success">
-                        GeeksForGeeks Countdown Timer
+                        Countdown App
                     </h1>
                     <input
                         type="text"
@@ -142,6 +156,12 @@ function Countdown() {
                             (e) => setNewTimerDateTime(e.target.value)
                         }
                     />
+                    <input
+                        type="file"
+                        className="form-control m-2"
+                        accept="image/*"
+                        onChange={(e) => handleImageUpload(e)}
+                    />
                     <button
                         className="btn btn-primary m-2"
                         onClick={addTimer}
@@ -167,6 +187,14 @@ function Countdown() {
                                     categoryColors[timer.category] || ""
                                 }`}
                             >
+                                {timer.image && (
+                                    <img 
+                                        src = {timer.image}
+                                        alt = "Timer"
+                                        className = "card-img-top"
+                                        style = {{maxHeight: "150px", objectFit: "cover"}}
+                                    />
+                                )}
                                <h3 className="card-title m-2 text-light">
                                     {timer.title}
                                </h3>

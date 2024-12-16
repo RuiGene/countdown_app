@@ -22,3 +22,8 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+.card-img-top {
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
